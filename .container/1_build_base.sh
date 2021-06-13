@@ -6,7 +6,7 @@ cd /tmp/docker_build
 IMAGE=jmnote/sentinews:base
 
 cat <<'EOF' > Dockerfile
-FROM python:3.8-slim
+FROM python:3.9-slim
 RUN set -x \
 && apt-get update && apt-get install -y \
   git \
