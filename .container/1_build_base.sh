@@ -15,7 +15,7 @@ RUN set -x \
   libmariadbclient-dev gcc \
 && curl -sL https://github.com/krallin/tini/releases/download/v0.19.0/tini -o /tini \
 && chmod +x /tini \
-&& curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+&& curl -sL https://deb.nodesource.com/setup_14.x | bash - \
 && apt-get install -y \
 	nodejs \
 && rm -rf /var/lib/apt/lists/*
