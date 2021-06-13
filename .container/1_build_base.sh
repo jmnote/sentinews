@@ -18,9 +18,7 @@ RUN set -x \
 && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
 && apt-get install -y \
 	nodejs \
-&& rm -rf /var/lib/apt/lists/* \
-&& npm install --global yarn \
-&& yarn global add @vue/cli
+&& rm -rf /var/lib/apt/lists/*
 EOF
 
 docker build -t $IMAGE . && docker push $IMAGE
