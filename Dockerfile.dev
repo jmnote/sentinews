@@ -4,7 +4,8 @@ COPY . /app
 WORKDIR /app
 RUN  set -xe \
 && npm install --global yarn \
-&& yarn global add @vue/cli @vue/cli-service \
+&& cd /app/frontend/ \
+&& yarn install \
 && cd /app/backend/ \
 && pip install --no-cache-dir -r requirements.txt \
 && echo done...
