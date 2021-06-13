@@ -35,9 +35,6 @@
 
 
 <script>
-//import Search from './Search';
-//import List from './List';
-
 export default {
   data() {
     return {
