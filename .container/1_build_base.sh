@@ -12,6 +12,7 @@ RUN set -x \
   git \
   curl \
   nginx \
+  supervisor \
   libmariadbclient-dev gcc \
 && curl -sL https://github.com/krallin/tini/releases/download/v0.19.0/tini -o /tini \
 && chmod +x /tini \
