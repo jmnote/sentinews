@@ -16,9 +16,9 @@ const routes = [
     component: () => import('@/views/List.vue')
   },
   {
-    path: '/star',
-    name: 'Star',
-    component: () => import('@/views/Star.vue')
+    path: '/polar',
+    name: 'Polar',
+    component: () => import('@/views/Polar.vue')
   }
 ]
 

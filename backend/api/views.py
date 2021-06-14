@@ -31,7 +31,11 @@ def search(request, keyword):
     return JsonResponse({'list':articles})
 
 def articles(request):
-    data = list(Article.objects.values())
+    data = list(Article.objects.values().order_by('-pub_date'))
+    return JsonResponse(data, safe=False)  
+
+def polars(request):
+    data = list(Article.objects.values().order_by('-avg_polarity'))
     return JsonResponse(data, safe=False)  
 
 def register(request):

@@ -31,7 +31,7 @@ export default {
   },
   mounted() {
     const vm = this;
-    axios.get("/api/articles").then(function (response) {
+    axios.get("/api/polars").then(function (response) {
       vm.articles = response.data;
       vm.articles.forEach((e) => (e.show = false));
       console.log(vm.articles);

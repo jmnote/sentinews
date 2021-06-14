@@ -20,7 +20,7 @@
             <v-tabs v-model="tab" centered grow>
               <v-tabs-slider></v-tabs-slider>
               <v-tab v-for="item in items" :to="item.to" :key="item.icon">
-                <v-icon>mdi-{{ item.icon }}</v-icon>&nbsp;{{ item.text }}
+                <v-icon>{{ item.icon }}</v-icon>&nbsp;{{ item.text }}
               </v-tab>
             </v-tabs>
           </template>
@@ -41,19 +41,19 @@ export default {
       tab: null,
       items: [
         {
-          icon: "magnify",
+          icon: "mdi-magnify",
           to: "/",
           text: "검색",
         },
         {
-          icon: "format-list-bulleted",
+          icon: "mdi-clock-outline",
           to: "/list",
-          text: "목록",
+          text: "최근순",
         },
         {
-          icon: "star",
-          to: "/star",
-          text: "책갈피",
+          icon: "mdi-emoticon-happy-outline",
+          to: "/polar",
+          text: "감성순",
         },
       ],
     };
