@@ -7,8 +7,16 @@
             <div>
               <b>{{ item.title }}</b>
             </div>
-            {{ item.content }}
+            {{ item.desc }}
           </v-card-text>
+          <v-layout justify-center>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text>
+                자세히 보기
+              </v-btn>
+            </v-card-actions>
+          </v-layout>
         </v-card>
       </v-col>
     </v-row>
@@ -16,6 +24,7 @@
 </template>
 
 <script>
+const axios = require("axios");
 export default {
   data() {
     return {
@@ -23,7 +32,10 @@ export default {
     };
   },
   mounted() {
-    //axios.
-  }
+    const vm = this;
+    axios.get("/api/articles").then(function (response) {
+      vm.articles = response.data;
+    });
+  },
 };
 </script>

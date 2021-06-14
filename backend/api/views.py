@@ -30,6 +30,10 @@ def search(request, keyword):
         })
     return JsonResponse({'list':articles})
 
+def articles(request):
+    data = list(Article.objects.values())
+    return JsonResponse(data, safe=False)  
+
 def register(request):
     ## STEP 1
     data = json.loads(request.body)
@@ -81,8 +85,11 @@ def register(request):
         else: 
             polarity = sum(sentence_polarities)/len(sentence_polarities)
         polarities.append(polarity)
-    avg_polarity = sum(polarities)/len(polarities)
-    
+    if len(polarities) > 0:
+        avg_polarity = sum(polarities)/len(polarities)
+    else:
+        avg_polarity = 0
+
     a.title = title
     a.content = content
     a.comments = "||||".join(comments)
@@ -91,6 +98,5 @@ def register(request):
     a.save()
 
     return JsonResponse({'msg':'ok'})
-    #return JsonResponse(data)
 
 
