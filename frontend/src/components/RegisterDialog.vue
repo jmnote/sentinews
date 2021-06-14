@@ -7,16 +7,11 @@
         </v-btn>
       </template>
       <v-card>
-        <v-card-title class="text-h5">
-          기사를 등록하시겠습니까?
-        </v-card-title>
-        <v-card-text
-          >Let Google help apps determine location. This means sending anonymous
-          location data to Google, even when no apps are running.</v-card-text
-        >
+        <v-card-title class="text-h5"> 등록하시겠습니까? </v-card-title>
+        <v-card-text>{{ item.title }}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="dialog = false">
+          <v-btn color="green darken-1" text @click="$emit('register', item)">
             YES
           </v-btn>
           <v-btn color="green darken-1" text @click="dialog = false">
@@ -30,6 +25,7 @@
 
 <script>
 export default {
+  props: ["item"],
   data() {
     return {
       dialog: false,

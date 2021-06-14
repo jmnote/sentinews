@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 
+import json
 import requests
 from bs4 import BeautifulSoup
 
@@ -20,8 +21,9 @@ def search(request, keyword):
         })
     return JsonResponse({'list':articles})
 
-def register(request, url):
-
-    pass
+def register(request):
+    data = json.loads(request.body.decode('utf-8'))
+    #data.title
+    return JsonResponse(data)
 
 

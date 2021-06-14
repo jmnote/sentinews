@@ -3,4 +3,5 @@ from api import views
 
 urlpatterns = [
     path('search/<str:keyword>', views.search),
+    path('register', views.register),
 ]

@@ -22,7 +22,10 @@
                 </div>
               </div>
               <div style="display: flex">
-                <RegisterDialog />
+                <RegisterDialog
+                  v-bind:item="item"
+                  @register="register"
+                ></RegisterDialog>
               </div>
             </div>
           </v-card-text>
@@ -34,7 +37,7 @@
 
 <script>
 const axios = require("axios");
-import RegisterDialog from '@/components/RegisterDialog.vue'
+import RegisterDialog from "@/components/RegisterDialog.vue";
 
 export default {
   components: {
@@ -43,12 +46,21 @@ export default {
   methods: {
     search() {
       const vm = this;
-      console.log("search", vm.keyword);
       axios.get(`/api/search/${vm.keyword}`).then(function (response) {
-        console.log(vm);
-        console.log(response.data.list);
         vm.articles = response.data.list;
       });
+    },
+    register(item) {
+      //const vm = this;
+      axios
+        .post("/api/register", item)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
     },
   },
   data() {
