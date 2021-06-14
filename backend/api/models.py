@@ -11,7 +11,8 @@ class Article(models.Model):
     status = models.CharField(max_length=16, null=True, blank=True, default=None)
     content = models.CharField(max_length=10000, null=True, blank=True, default=None)
     comments = models.CharField(max_length=1000, null=True, blank=True, default=None)
-    polarity = models.FloatField(null=True, blank=True, default=None)
+    polarities = models.CharField(max_length=64,null=True, blank=True, default=None)
+    avg_polarity = models.FloatField(null=True, blank=True, default=None)
 
 # class Comment(models.Model):
 #     article = models.ForeignKey(Article, on_delete=models.CASCADE)

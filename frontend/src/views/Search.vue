@@ -24,7 +24,7 @@
               <div style="display: flex">
                 <RegisterDialog
                   v-bind:item="item"
-                  @register="register"
+                  @registered="registered"
                 ></RegisterDialog>
               </div>
             </div>
@@ -50,44 +50,15 @@ export default {
         vm.articles = response.data.list;
       });
     },
-    register(item) {
-      //const vm = this;
-      axios
-        .post("/api/register", item)
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          // handle error
-          console.log(error);
-        });
+    registered() {
+      console.log('registered')
+      this.$router.push({ name: 'List' })
     },
   },
   data() {
     return {
       keyword: "",
-      articles: [
-        {
-          title: "hello",
-          desc: "바른미래당, 경남도당 공동위원장에 안성오 임명",
-          url: "url1",
-        },
-        {
-          title: "hello",
-          desc: "바른미래당, 경남도당 공동위원장에 안성오 임명",
-          url: "url2",
-        },
-        {
-          title: "hello",
-          desc: "바른미래당, 경남도당 공동위원장에 안성오 임명",
-          url: "url3",
-        },
-        {
-          title: "hello",
-          desc: "바른미래당, 경남도당 공동위원장에 안성오 임명",
-          url: "url4",
-        },
-      ],
+      articles: [],
     };
   },
 };

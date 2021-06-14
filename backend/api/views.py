@@ -5,8 +5,11 @@ from django.utils import timezone
 import json
 import requests
 from bs4 import BeautifulSoup
+import os
 
 from api.models import Article
+from google_trans_new import google_translator
+from textblob import TextBlob
 
 import logging
 logger = logging.getLogger('django')
@@ -43,20 +46,51 @@ def register(request):
         a.pub_date = pub_date
     else:
         a = Article(url=url, title=title, desc=desc, pub_date=pub_date)
-    a.save()
+    #a.save()
 
     ## STEP 2
-    # r = requests.get(url, headers={'User-Agent':'Mozilla/5.0'})
-    # soup = BeautifulSoup(r.text, 'html.parser')
+    translator = google_translator()
 
-    # title = soup.find("meta", property="og:title")
-    # title = title["content"] if title else None
+    r = requests.get('http://'+os.environ['DJANGO_BROWSER_SERVER']+'/browser/get.php?url='+url)
+    j = json.loads(r.text)
+    page = j['page']
+    #logger.info(page)
+    soup = BeautifulSoup(page, 'html.parser')
 
-    # content = soup.select_one('#harmonyContainer section')
-    # content = "".join([str(x) for x in content.contents])
-    # content = content.strip()
+    title = soup.find("meta", property="og:title")
+    title = title["content"] if title else None
+
+    content = soup.select_one('#harmonyContainer section')
+    #content = "".join([str(x) for x in content.contents])
+    content = content.get_text().strip()
     
+    tags = soup.select('ul.list_comment > li p.desc_txt')
+    comments = []
+    polarities = []
+    for tag in tags:
+        comment = tag.contents[0]
+        comments.append(comment)
+        en = translator.translate(comment, lang_tgt='en')
+        logger.info(en)
+        blob = TextBlob(en)
+        sentence_polarities = []
+        for sentence in blob.sentences:
+            sentence_polarities.append(sentence.sentiment.polarity)
+        if len(sentence_polarities) < 1:
+            polarity = 0
+        else: 
+            polarity = sum(sentence_polarities)/len(sentence_polarities)
+        polarities.append(polarity)
+    avg_polarity = sum(polarities)/len(polarities)
+    
+    a.title = title
+    a.content = content
+    a.comments = "||||".join(comments)
+    a.polarities = "||||".join(map(str,polarities))
+    a.avg_polarity = avg_polarity
+    a.save()
 
-    return JsonResponse(data)
+    return JsonResponse({'msg':'ok'})
+    #return JsonResponse(data)
 
 

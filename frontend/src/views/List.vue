@@ -19,69 +19,11 @@
 export default {
   data() {
     return {
-      articles: [
-        {
-          title: "Hello 1----------------------------------",
-          content:
-            "This pattern can be used when you need a toolbar, a responsive drawer and content to be displayed following the Material ",
-        },
-        {
-          title: "Hello 2",
-          content:
-            "This pattern can be used when you need a toolbar, a responsive drawer and content to be displayed following the Material ",
-        },
-        {
-          title: "Hello",
-          content:
-            "This pattern can be used when you need a toolbar, a responsive drawer and content to be displayed following the Material ",
-        },
-        {
-          title: "Hello 1",
-          content:
-            "This pattern can be used when you need a toolbar, a responsive drawer and content to be displayed following the Material ",
-        },
-        {
-          title: "Hello 2",
-          content:
-            "This pattern can be used when you need a toolbar, a responsive drawer and content to be displayed following the Material ",
-        },
-        {
-          title: "Hello",
-          content:
-            "This pattern can be used when you need a toolbar, a responsive drawer and content to be displayed following the Material ",
-        },
-        {
-          title: "Hello 1",
-          content:
-            "This pattern can be used when you need a toolbar, a responsive drawer and content to be displayed following the Material ",
-        },
-        {
-          title: "Hello 2",
-          content:
-            "This pattern can be used when you need a toolbar, a responsive drawer and content to be displayed following the Material ",
-        },
-        {
-          title: "Hello",
-          content:
-            "This pattern can be used when you need a toolbar, a responsive drawer and content to be displayed following the Material ",
-        },
-        {
-          title: "Hello 1",
-          content:
-            "This pattern can be used when you need a toolbar, a responsive drawer and content to be displayed following the Material ",
-        },
-        {
-          title: "Hello 2",
-          content:
-            "This pattern can be used when you need a toolbar, a responsive drawer and content to be displayed following the Material ",
-        },
-        {
-          title: "Hello",
-          content:
-            "This pattern can be used when you need a toolbar, a responsive drawer and content to be displayed following the Material ",
-        },
-      ],
+      articles: [],
     };
   },
+  mounted() {
+    //axios.
+  }
 };
 </script>
