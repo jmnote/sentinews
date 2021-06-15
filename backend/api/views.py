@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.utils import timezone
+from django.utils.html import strip_tags
 
 import json
 import requests
@@ -48,16 +49,35 @@ def search(request, keyword):
 
 def articles(request):
     data = list(Article.objects.values().order_by('-pub_date'))
-    return JsonResponse(data, safe=False)  
+    rows = []
+    for d in data:
+        if len(d['comments'].strip()) < 1:
+            d['comments'] = []
+            d['polarities'] = []
+        else:
+            d['comments'] = d['comments'].split('||||')
+            d['polarities'] = d['polarities'].split('||||')
+        rows.append(d)
+    return JsonResponse(rows, safe=False)  
 
 def polars(request):
     data = list(Article.objects.values().order_by('-avg_polarity'))
-    return JsonResponse(data, safe=False)  
+    rows = []
+    for d in data:
+        if len(d['comments'].strip()) < 1:
+            d['comments'] = []
+            d['polarities'] = []
+        else:
+            d['comments'] = d['comments'].split('||||')
+            d['polarities'] = d['polarities'].split('||||')
+        rows.append(d)
+    return JsonResponse(rows, safe=False)  
 
 def register(request):
     ## STEP 1
     data = json.loads(request.body)
-    url = data['url']
+    url = data['url'].replace('v.media.daum.net','news.v.daum.net')
+    logger.info(url)
     title = data['title']
     desc = data['desc']
     pub_date = timezone.now()
@@ -78,7 +98,7 @@ def register(request):
     r = requests.get('http://'+os.environ['DJANGO_BROWSER_SERVER']+'/browser/get.php?url='+url)
     j = json.loads(r.text)
     page = j['page']
-    logger.info(page)
+    #logger.info(page)
     soup = BeautifulSoup(page, 'html.parser')
 
     title = soup.find("meta", property="og:title")
@@ -89,11 +109,11 @@ def register(request):
     content = content.get_text().strip()
     
     tags = soup.select('ul.list_comment > li p.desc_txt')
-    logger.info(tags)
     comments = []
     polarities = []
     for tag in tags:
         comment = tag.contents[0]
+        logger.info(comment)
         comments.append(comment)
         logger.info('comment',comment)
         en = translator.translate(comment, lang_tgt='en')

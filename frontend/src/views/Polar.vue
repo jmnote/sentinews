@@ -5,13 +5,27 @@
         <v-expansion-panel v-for="(item, i) in articles" :key="i">
           <v-expansion-panel-header>
             <div>
-            <div><b>{{ item.title }}</b></div>
-            <div><small>{{ item.desc }}</small></div>
+              <div style="float: left" class="mr-4">
+                <PolarAvatar v-bind:polarity="item.avg_polarity"></PolarAvatar>
+              </div>
+              <div>
+                <b>{{ item.title }}</b>
+              </div>
+              <div>
+                <small>{{ item.desc }}</small>
+              </div>
             </div>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <div style='white-space: pre;white-space: break-spaces;'>
-              {{ item.content.replace(/\n\s*\n/g, '\n') }}
+            <v-card v-for="(comment, i) in item.comments" :key="i">
+              <v-card-text>
+                <PolarAvatar v-bind:polarity="item.polarities[i]"></PolarAvatar>
+                {{ comment }}
+              </v-card-text>
+            </v-card>
+            <hr />
+            <div style="white-space: pre; white-space: break-spaces">
+              {{ item.content.replace(/\n\s*\n/g, "\n") }}
             </div>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -22,7 +36,13 @@
 
 <script>
 const axios = require("axios");
+
+import PolarAvatar from "@/components/PolarAvatar.vue";
+
 export default {
+  components: {
+    PolarAvatar,
+  },
   data() {
     return {
       articles: [],
