@@ -94,7 +94,10 @@ DATABASES = {
         'PORT': os.environ['DJANGO_DATABASES_PORT'],
         'TEST': {
             #'NAME': 'test'
-        }
+        },
+        'OPTIONS': {
+          'init_command': 'ALTER DATABASE sentinews CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci',
+        },
     }
 }
 

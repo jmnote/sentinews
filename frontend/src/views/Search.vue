@@ -44,16 +44,22 @@ export default {
     RegisterDialog,
   },
   methods: {
-    search() {
+    getArticles(keyword) {
       const vm = this;
-      axios.get(`/api/search/${vm.keyword}`).then(function (response) {
+      axios.get(`/api/search/${keyword}`).then(function (response) {
         vm.articles = response.data.list;
       });
+    },
+    search() {
+      this.getArticles(this.keyword)
     },
     registered() {
       console.log('registered')
       this.$router.push({ name: 'List' })
     },
+  },
+  mounted() {
+    this.getArticles('*')
   },
   data() {
     return {

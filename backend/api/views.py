@@ -14,7 +14,23 @@ from textblob import TextBlob
 import logging
 logger = logging.getLogger('django')
 
+def bestreply():
+    r = requests.get('https://news.daum.net/ranking/bestreply/')
+    soup = BeautifulSoup(r.text, 'html.parser')
+    tags = soup.select('ul.list_news2 > li')
+    articles = []
+    for tag in tags:
+        articles.append({
+            'title': tag.select_one('a.link_txt').text,
+            'url': tag.select_one('a.link_txt')['href'],
+            'desc': tag.select_one('span.link_txt').text
+        })
+    return JsonResponse({'list':articles})
+
 def search(request, keyword):
+    keyword = keyword.strip()
+    if keyword == '*':
+        return bestreply()
     r = requests.get(f'https://search.daum.net/search?w=news&q={keyword}')
     soup = BeautifulSoup(r.text, 'html.parser')
     tags = soup.select('ul#clusterResultUL > li')
@@ -48,16 +64,13 @@ def register(request):
     user_ip = request.META.get('HTTP_X_FORWARDED_FOR').split(',')[0]
 
     articles = Article.objects.filter(url=url) 
-    if articles.exists():
-        a = articles.first()
-    else:
-        a = Article()
-
+    a = articles.first() if articles.exists() else Article()
     a.url = url
     a.title = title
     a.desc = desc
     a.user_ip = user_ip
     a.pub_date = pub_date
+    logger.info(a)
     
     ## STEP 2
     translator = google_translator()
@@ -65,7 +78,7 @@ def register(request):
     r = requests.get('http://'+os.environ['DJANGO_BROWSER_SERVER']+'/browser/get.php?url='+url)
     j = json.loads(r.text)
     page = j['page']
-    #logger.info(page)
+    logger.info(page)
     soup = BeautifulSoup(page, 'html.parser')
 
     title = soup.find("meta", property="og:title")
@@ -76,13 +89,15 @@ def register(request):
     content = content.get_text().strip()
     
     tags = soup.select('ul.list_comment > li p.desc_txt')
+    logger.info(tags)
     comments = []
     polarities = []
     for tag in tags:
         comment = tag.contents[0]
         comments.append(comment)
+        logger.info('comment',comment)
         en = translator.translate(comment, lang_tgt='en')
-        logger.info(en)
+        logger.info('en',en)
         blob = TextBlob(en)
         sentence_polarities = []
         for sentence in blob.sentences:
@@ -104,6 +119,7 @@ def register(request):
     a.comments_count = comments_count
     a.polarities = "||||".join(map(str,polarities))
     a.avg_polarity = avg_polarity
+    logger.info(a)
     a.save()
 
     return JsonResponse({'msg':'ok'})
