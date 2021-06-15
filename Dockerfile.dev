@@ -8,5 +8,7 @@ RUN  set -xe \
 && yarn install \
 && cd /app/backend/ \
 && pip install --no-cache-dir -r requirements.txt \
+&& cd /root/ \
+&& python -m textblob.download_corpora \
 && echo done...
 
