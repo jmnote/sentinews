@@ -45,17 +45,20 @@ def register(request):
     title = data['title']
     desc = data['desc']
     pub_date = timezone.now()
+    user_ip = request.META.get('HTTP_X_FORWARDED_FOR').split(',')[0]
+
     articles = Article.objects.filter(url=url) 
     if articles.exists():
         a = articles.first()
-        a.url = url
-        a.title = title
-        a.desc = desc
-        a.pub_date = pub_date
     else:
-        a = Article(url=url, title=title, desc=desc, pub_date=pub_date)
-    #a.save()
+        a = Article()
 
+    a.url = url
+    a.title = title
+    a.desc = desc
+    a.user_ip = user_ip
+    a.pub_date = pub_date
+    
     ## STEP 2
     translator = google_translator()
 
@@ -89,14 +92,16 @@ def register(request):
         else: 
             polarity = sum(sentence_polarities)/len(sentence_polarities)
         polarities.append(polarity)
-    if len(polarities) > 0:
-        avg_polarity = sum(polarities)/len(polarities)
+    comments_count = len(comments)
+    if comments_count > 0:
+        avg_polarity = sum(polarities)/comments_count
     else:
         avg_polarity = 0
 
     a.title = title
     a.content = content
     a.comments = "||||".join(comments)
+    a.comments_count = comments_count
     a.polarities = "||||".join(map(str,polarities))
     a.avg_polarity = avg_polarity
     a.save()

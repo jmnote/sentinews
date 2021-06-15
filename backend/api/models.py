@@ -7,12 +7,12 @@ class Article(models.Model):
     title = models.CharField(max_length=200) 
     desc = models.CharField(max_length=500)
     pub_date = models.DateTimeField('date published')
-    user_ip = models.CharField(max_length=16, null=True, blank=True, default=None)
-    status = models.CharField(max_length=16, null=True, blank=True, default=None)
-    content = models.CharField(max_length=10000, null=True, blank=True, default=None)
-    comments = models.CharField(max_length=1000, null=True, blank=True, default=None)
-    polarities = models.CharField(max_length=64,null=True, blank=True, default=None)
-    avg_polarity = models.FloatField(null=True, blank=True, default=None)
+    user_ip = models.CharField(max_length=32)
+    content = models.CharField(max_length=10000)
+    comments = models.CharField(max_length=1000)
+    comments_count = models.IntegerField()
+    polarities = models.CharField(max_length=64)
+    avg_polarity = models.FloatField()
 
 # class Comment(models.Model):
 #     article = models.ForeignKey(Article, on_delete=models.CASCADE)
